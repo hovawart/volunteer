@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Become a listener — Porchlight</title>
+<meta name="description" content="Sign up to volunteer as a listener with Porchlight.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,560;9..144,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Porchlight — a peer listening network
+   Design tokens
+   ============================================================ */
+
+:root {
+  /* Color: dusk palette — the moment just after sunset when a porch light
+     comes on. Cool blue-grey ground, warm lamp-glow accent. */
+  --ink:        #1E2A38;   /* deep dusk blue — primary text */
+  --ink-soft:   #47586B;   /* secondary text */
+  --paper:      #EEF1F1;   /* pale blue-grey ground */
+  --paper-raised: #FFFFFF; /* cards / form fields */
+  --dusk:       #3A4A63;   /* deep indigo — dark sections */
+  --dusk-deep:  #24304472; /* translucent overlay */
+  --glow:       #E8A33D;   /* lamplight amber — primary accent */
+  --glow-soft:  #F4C978;   /* lighter amber for hovers */
+  --sage:       #7C9885;   /* calm green — secondary accent */
+  --line:       #D3DAE0;   /* hairline borders */
+  --line-dark:  #566578;   /* borders on dark sections */
+
+  /* Type */
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-body: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  /* Scale */
+  --step-1: clamp(2.6rem, 2rem + 2.6vw, 4.4rem);
+  --step-2: clamp(1.7rem, 1.4rem + 1.3vw, 2.4rem);
+  --step-3: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --step-0: 1.0625rem;
+  --step-caption: 0.85rem;
+
+  --radius: 14px;
+  --radius-sm: 8px;
+  --container: 1120px;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* Intentionally not switching automatically — the palette is fixed
+     to preserve the lamplight concept regardless of system theme. */
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: inherit; }
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.08;
+  margin: 0 0 0.5em;
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: var(--step-1); font-weight: 560; }
+h2 { font-size: var(--step-2); }
+h3 { font-size: var(--step-3); font-weight: 600; }
+
+p { margin: 0 0 1em; color: var(--ink-soft); }
+p:last-child { margin-bottom: 0; }
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--glow);
+  display: inline-block;
+  margin-bottom: 0.9em;
+}
+
+/* ---------------- Skip link / focus ---------------- */
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--ink);
+  color: white;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  z-index: 100;
+}
+.skip-link:focus {
+  left: 16px;
+  top: 16px;
+}
+
+:focus-visible {
+  outline: 2.5px solid var(--glow);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------------- Header / nav ---------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(238, 241, 241, 0.88);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.brand .dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--glow);
+  box-shadow: 0 0 0 4px rgba(232, 163, 61, 0.22);
+  animation: breathe 4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  padding: 8px 14px;
+  border-radius: 999px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.nav-links a:hover { color: var(--ink); background: rgba(30, 42, 56, 0.06); }
+
+.nav-links a[aria-current="page"] {
+  color: var(--ink);
+  font-weight: 600;
+  background: rgba(232, 163, 61, 0.16);
+}
+
+.nav-cta {
+  background: var(--ink) !important;
+  color: white !important;
+  font-weight: 600;
+}
+.nav-cta:hover { background: var(--dusk) !important; }
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.nav-toggle svg { width: 20px; height: 20px; }
+
+/* ---------------- Buttons ---------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.98rem;
+  padding: 13px 24px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.15s ease, background 0.15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.btn:active { transform: translateY(1px); }
+
+.btn-primary {
+  background: var(--glow);
+  color: var(--ink);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+.btn-primary:hover { background: var(--glow-soft); }
+
+.btn-dark {
+  background: var(--ink);
+  color: white;
+}
+.btn-dark:hover { background: var(--dusk); }
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--line-dark);
+  color: inherit;
+}
+.btn-outline:hover { border-color: var(--ink); }
+
+.btn-outline.on-light { border-color: var(--line); }
+.btn-outline.on-light:hover { border-color: var(--ink); }
+
+/* ---------------- Hero ---------------- */
+.hero {
+  position: relative;
+  padding: 84px 0 96px;
+  overflow: hidden;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.hero h1 { max-width: 12ch; }
+.hero-lede {
+  font-size: 1.18rem;
+  max-width: 46ch;
+  margin-bottom: 1.8em;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 2.2em;
+}
+
+.hero-note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  max-width: 42ch;
+}
+.hero-note svg { flex-shrink: 0; margin-top: 2px; width: 15px; height: 15px; color: var(--glow); }
+
+/* the signature: a breathing lamp — expands and contracts on a slow,
+   even cycle, standing in for a calm breathing pace and for a porch
+   light left on for whoever needs it. */
+.lamp-wrap {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lamp-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(58, 74, 99, 0.16);
+}
+.lamp-ring.r1 { width: 100%; height: 100%; }
+.lamp-ring.r2 { width: 74%; height: 74%; }
+.lamp-ring.r3 { width: 48%; height: 48%; }
+
+.lamp-core {
+  position: relative;
+  width: 26%;
+  height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--glow-soft), var(--glow) 65%, #c8822a 100%);
+  box-shadow: 0 0 60px 18px rgba(232, 163, 61, 0.35);
+  animation: breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(0.94); box-shadow: 0 0 60px 18px rgba(232, 163, 61, 0.28); }
+  50% { transform: scale(1.06); box-shadow: 0 0 74px 26px rgba(232, 163, 61, 0.42); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lamp-core, .brand .dot { animation: none; }
+}
+
+/* ---------------- Sections ---------------- */
+section { padding: 88px 0; }
+.section-head { max-width: 60ch; margin-bottom: 48px; }
+.section-head.center { margin-left: auto; margin-right: auto; text-align: center; }
+
+.dark-section {
+  background: var(--dusk);
+  color: white;
+}
+.dark-section p { color: rgba(255,255,255,0.72); }
+.dark-section h2, .dark-section h3 { color: white; }
+
+/* Steps — a genuine sequence, so numbering is appropriate here */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.step {
+  padding: 30px;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.step .num {
+  font-family: var(--font-mono);
+  color: var(--glow);
+  font-size: 0.85rem;
+  display: block;
+  margin-bottom: 14px;
+}
+
+/* Clarify grid — what this is / isn't */
+.clarify-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.clarify-card {
+  border-radius: var(--radius);
+  padding: 30px;
+  border: 1px solid var(--line);
+}
+.clarify-card.is { background: rgba(124, 152, 133, 0.13); border-color: rgba(124,152,133,0.4); }
+.clarify-card.isnt { background: rgba(232, 163, 61, 0.09); border-color: rgba(232,163,61,0.35); }
+.clarify-card ul { margin: 0; padding-left: 1.2em; color: var(--ink-soft); }
+.clarify-card li { margin-bottom: 0.5em; }
+.clarify-card h3 { display: flex; align-items: center; gap: 10px; }
+
+/* Cards / values grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.value-card {
+  padding: 28px;
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+}
+.value-card .icon {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: rgba(232, 163, 61, 0.18);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+  color: var(--glow);
+}
+.value-card .icon svg { width: 19px; height: 19px; }
+
+/* Quote / testimonial */
+.quote-block {
+  max-width: 62ch;
+  margin: 0 auto;
+  text-align: center;
+}
+.quote-block blockquote {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 1.1rem + 1vw, 1.8rem);
+  font-weight: 500;
+  line-height: 1.4;
+  margin: 0 0 20px;
+  color: var(--ink);
+}
+.quote-block cite {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+/* CTA band */
+.cta-band {
+  border-radius: 24px;
+  background: var(--ink);
+  color: white;
+  padding: 64px 48px;
+  text-align: center;
+}
+.cta-band h2 { color: white; margin-bottom: 0.3em; }
+.cta-band p { color: rgba(255,255,255,0.72); max-width: 48ch; margin: 0 auto 2em; }
+.cta-band .hero-actions { justify-content: center; margin-bottom: 0; }
+
+/* ---------------- Forms ---------------- */
+.form-page-hero {
+  padding: 64px 0 40px;
+}
+.form-page-hero .eyebrow { margin-bottom: 0.6em; }
+.form-page-hero p { max-width: 56ch; font-size: 1.08rem; }
+
+.form-shell {
+  max-width: 720px;
+  margin: 0 auto;
+  padding-bottom: 100px;
+}
+
+.crisis-note {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: rgba(232, 163, 61, 0.12);
+  border: 1px solid rgba(232, 163, 61, 0.4);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin-bottom: 40px;
+}
+.crisis-note svg { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; color: #b5762a; }
+.crisis-note p { margin: 0; font-size: 0.93rem; color: var(--ink); }
+.crisis-note strong { display: block; margin-bottom: 4px; font-family: var(--font-display); font-size: 1rem; }
+.crisis-note a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+
+form {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+legend {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 0;
+  margin-bottom: 4px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.hint {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  font-weight: 400;
+  margin-top: -4px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select,
+textarea {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  width: 100%;
+}
+
+textarea { resize: vertical; min-height: 110px; }
+
+input::placeholder, textarea::placeholder { color: #8B98A6; }
+
+.check-grid, .radio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.check-option, .radio-option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--paper);
+}
+.check-option:has(input:checked), .radio-option:has(input:checked) {
+  border-color: var(--glow);
+  background: rgba(232, 163, 61, 0.12);
+}
+.check-option input, .radio-option input { accent-color: var(--glow); width: 16px; height: 16px; flex-shrink: 0; }
+
+.consent-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+.consent-row input { margin-top: 3px; accent-color: var(--glow); }
+
+.form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.form-footer .hint { margin: 0; max-width: 32ch; }
+
+.form-success {
+  display: none;
+  text-align: center;
+  padding: 56px 40px;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.form-success .icon {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: rgba(124, 152, 133, 0.18);
+  color: var(--sage);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+}
+.form-success .icon svg { width: 26px; height: 26px; }
+
+/* ---------------- About page specifics ---------------- */
+.about-hero {
+  padding: 76px 0 40px;
+}
+.about-hero .eyebrow { margin-bottom: 0.6em; }
+.about-lede { font-size: 1.15rem; max-width: 58ch; }
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-left: 2px solid var(--line);
+  padding-left: 32px;
+  max-width: 62ch;
+}
+.timeline-item { position: relative; padding-bottom: 34px; }
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -37.5px;
+  top: 4px;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--glow);
+  border: 3px solid var(--paper);
+  box-shadow: 0 0 0 1.5px var(--glow);
+}
+.timeline-item h3 { margin-bottom: 4px; }
+.timeline-item .when { font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-soft); }
+
+.boundary-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.boundary-item {
+  display: flex;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+}
+.boundary-item svg { width: 18px; height: 18px; color: var(--glow); flex-shrink: 0; margin-top: 3px; }
+.boundary-item h3 { font-size: 1rem; margin-bottom: 3px; }
+.boundary-item p { font-size: 0.9rem; }
+
+/* ---------------- Footer ---------------- */
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: 48px 0 36px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 36px;
+}
+.footer-brand p { font-size: 0.9rem; max-width: 34ch; }
+.footer-col h3 {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+}
+.footer-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.footer-col a { text-decoration: none; font-size: 0.92rem; color: var(--ink-soft); }
+.footer-col a:hover { color: var(--ink); }
+
+.crisis-strip {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: var(--dusk);
+  color: white;
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  font-size: 0.88rem;
+  margin-bottom: 28px;
+}
+.crisis-strip svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--glow-soft); }
+.crisis-strip a { color: var(--glow-soft); text-decoration: underline; text-underline-offset: 2px; }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .lamp-wrap { max-width: 280px; margin: 0 auto; order: -1; }
+  .steps, .clarify-grid, .card-grid, .boundary-list, .field-row, .check-grid, .radio-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .nav-links { display: none; }
+  .nav-toggle { display: flex; }
+  section { padding: 60px 0; }
+}
+
+@media (max-width: 560px) {
+  .cta-band { padding: 44px 24px; }
+  form { padding: 26px; }
+  .form-footer { flex-direction: column; align-items: stretch; }
+  .form-footer .btn { width: 100%; justify-content: center; }
+}
+
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="site-header">
+  <nav class="nav" aria-label="Primary">
+    <a href="index.html" class="brand"><span class="dot" aria-hidden="true"></span> Porchlight</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="request.html">Request a session</a></li>
+      <li><a href="volunteer.html" class="nav-cta" aria-current="page">Become a listener</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="form-page-hero">
+    <div class="container">
+      <span class="eyebrow">Volunteer sign-up</span>
+      <h1 style="max-width:18ch;">Offer someone your full attention.</h1>
+      <p>Tell us a bit about yourself below. After you apply, a coordinator will follow up about a short interview and our free training before you take your first session.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:24px;">
+    <div class="container form-shell">
+
+      <form data-demo-form novalidate>
+
+        <fieldset>
+          <legend>Your details</legend>
+          <div class="field-row">
+            <div class="field">
+              <label for="v-name">Full name</label>
+              <input type="text" id="v-name" name="name" placeholder="Jordan Lee" required autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="v-preferred">Preferred name <span style="font-weight:400;color:var(--ink-soft);">(optional)</span></label>
+              <input type="text" id="v-preferred" name="preferred_name" placeholder="What should we call you?" autocomplete="nickname">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="v-email">Email</label>
+              <input type="email" id="v-email" name="email" placeholder="you@example.com" required autocomplete="email">
+            </div>
+            <div class="field">
+              <label for="v-phone">Phone <span style="font-weight:400;color:var(--ink-soft);">(optional)</span></label>
+              <input type="tel" id="v-phone" name="phone" placeholder="(555) 555-5555" autocomplete="tel">
+            </div>
+          </div>
+          <div class="field">
+            <label for="v-age">Age range</label>
+            <select id="v-age" name="age_range" required>
+              <option value="" disabled selected>Select one</option>
+              <option>18–24</option>
+              <option>25–34</option>
+              <option>35–44</option>
+              <option>45–54</option>
+              <option>55–64</option>
+              <option>65+</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Availability</legend>
+          <div class="field">
+            <label>Which days generally work for you?</label>
+            <div class="check-grid">
+              <label class="check-option"><input type="checkbox" name="days" value="mon"> Monday</label>
+              <label class="check-option"><input type="checkbox" name="days" value="tue"> Tuesday</label>
+              <label class="check-option"><input type="checkbox" name="days" value="wed"> Wednesday</label>
+              <label class="check-option"><input type="checkbox" name="days" value="thu"> Thursday</label>
+              <label class="check-option"><input type="checkbox" name="days" value="fri"> Friday</label>
+              <label class="check-option"><input type="checkbox" name="days" value="weekend"> Weekends</label>
+            </div>
+          </div>
+          <div class="field">
+            <label>What time of day usually works best?</label>
+            <div class="radio-grid">
+              <label class="radio-option"><input type="radio" name="time_of_day" value="morning"> Morning</label>
+              <label class="radio-option"><input type="radio" name="time_of_day" value="afternoon"> Afternoon</label>
+              <label class="radio-option"><input type="radio" name="time_of_day" value="evening"> Evening</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="v-hours">Roughly how many hours a week could you offer?</label>
+            <select id="v-hours" name="hours_per_week">
+              <option value="" disabled selected>Select one</option>
+              <option>Less than 1 hour</option>
+              <option>1–2 hours</option>
+              <option>3–5 hours</option>
+              <option>5+ hours</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>A bit more about you</legend>
+          <div class="field">
+            <label for="v-why">Why do you want to volunteer as a listener?</label>
+            <textarea id="v-why" name="motivation" placeholder="Share what's drawing you to this — a few sentences is plenty." required></textarea>
+          </div>
+          <div class="field">
+            <label for="v-experience">Any relevant experience? <span style="font-weight:400;color:var(--ink-soft);">(optional)</span></label>
+            <textarea id="v-experience" name="experience" placeholder="Peer support, counseling coursework, crisis line work, or just life experience you'd bring — whatever feels relevant."></textarea>
+            <span class="hint">No formal background is required. We train every volunteer regardless of experience.</span>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Before you submit</legend>
+          <label class="consent-row">
+            <input type="checkbox" name="agree_guidelines" required>
+            <span>I understand that Porchlight volunteers are not licensed professionals, and I agree to complete screening and training and to follow the program's <a href="about.html#boundaries">safety guidelines</a> before taking sessions.</span>
+          </label>
+          <label class="consent-row">
+            <input type="checkbox" name="agree_background" required>
+            <span>I'm willing to complete a background reference check as part of the application process.</span>
+          </label>
+        </fieldset>
+
+        <div class="form-footer">
+          <span class="hint">We'll email you within a few days about next steps.</span>
+          <button type="submit" class="btn btn-primary">Submit application</button>
+        </div>
+      </form>
+
+      <div class="form-success" data-form-success role="status">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <h2>Thanks for stepping up.</h2>
+        <p>Your application is in. A coordinator will reach out by email about a short interview and our training schedule.</p>
+        <div style="margin-top:28px;"><a href="index.html" class="btn btn-outline on-light">Back to home</a></div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="crisis-strip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
+      <span>In immediate danger or crisis? In the US, call or text <a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) or call 911. Outside the US, contact your local emergency services.</span>
+    </div>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="brand"><span class="dot" aria-hidden="true"></span> Porchlight</a>
+        <p>A volunteer listening network. Peer support, freely given, with clear boundaries and real care.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Site</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="request.html">Request a session</a></li>
+          <li><a href="volunteer.html">Become a listener</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="tel:988">988 Suicide &amp; Crisis Lifeline</a></li>
+          <li><a href="https://www.crisistextline.org" target="_blank" rel="noopener">Crisis Text Line</a></li>
+          <li><a href="about.html#boundaries">Our boundaries &amp; safety policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Porchlight. A community volunteer project.</span>
+      <span>Not a licensed medical or mental health service.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Mobile nav toggle
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.querySelector(".nav-toggle");
+  const links = document.querySelector(".nav-links");
+  if (toggle && links) {
+    toggle.addEventListener("click", () => {
+      const open = links.classList.toggle("nav-open");
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  }
+
+  // Demo form handling — no backend is wired up yet.
+  // Swap this for a real submission (fetch to your API, a form
+  // service like Formspree, etc.) when you're ready to go live.
+  const form = document.querySelector("[data-demo-form]");
+  const success = document.querySelector("[data-form-success]");
+  if (form && success) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      form.style.display = "none";
+      success.style.display = "block";
+      success.setAttribute("tabindex", "-1");
+      success.focus();
+    });
+  }
+});
+
+</script>
+</body>
+</html>
